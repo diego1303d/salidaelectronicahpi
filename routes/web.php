@@ -5,6 +5,7 @@ use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\VariedadesController;
 use Illuminate\Support\Facades\Route;
 
+
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
@@ -26,6 +27,7 @@ Route::middleware(['auth'])->group(function () {
     /// V Ruta de  Variedad //
 
     Route::get('/variedad',[VariedadesController::class,'index'])->name('Variedad.index');
+
     Route::patch('variedades/{variedad}/toggle', [VariedadesController::class, 'toggle'])->name('variedades.toggle');
 // GET = "muéstrame algo". Cuando el usuario da clic en "Nueva variedad",
 // el navegador pide esta URL y Laravel llama al método create() del controller.
@@ -40,6 +42,21 @@ Route::post('/variedades', [VariedadesController::class, 'store'])->name('Varied
 
 Route::get('/variedades/{variedad}/editar', [VariedadesController::class, 'edit'])->name('Variedad.edit');
 Route::put('/variedades/{variedad}', [VariedadesController::class, 'update'])->name('Variedad.update');
+
+
+
+
+// Ubicaciones
+Route::get('/ubicaciones', [App\Http\Controllers\UbicacionesController::class,'index'])->name('ubicaciones.index');
+Route::get('/ubicaicones/crear' , [App\Http\Controllers\UbicacionesController::class,'create'])->name('ubicaciones.create');
+Route::post('/ubicaciones',[App\Http\Controllers\UbicacionesController::class,'store'])->name('ubicaciones.store');
+Route::patch('ubicaciones/{ubicacion}/toggle', [App\Http\Controllers\UbicacionesController::class, 'toggle'])->name('ubicaciones.toggle');
+
+//Editar
+
+Route::get('/ubicaciones/{ubicacion}/editar', [App\Http\Controllers\UbicacionesController::class, 'edit'])->name('ubicaciones.edit');
+Route::put('/ubicaciones/{ubicacion}', [App\Http\Controllers\UbicacionesController::class, 'update'])->name('ubicaciones.update');
+
 
 
 });

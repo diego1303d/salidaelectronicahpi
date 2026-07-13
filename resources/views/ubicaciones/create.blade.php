@@ -1,5 +1,60 @@
 <x-layouts.app>
 
+   <head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Nueva Ubicación - Laravel Dashboard</title>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts for Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style data-purpose="custom-styles">
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    /* Main background gradient matching the mockup */
+    .bg-main-gradient {
+      background: radial-gradient(circle at 70% 30%, rgba(220, 245, 230, 0.6) 0%, rgba(255, 255, 255, 1) 60%),
+                  radial-gradient(circle at 90% 90%, rgba(255, 235, 150, 0.4) 0%, transparent 50%),
+                  radial-gradient(circle at 10% 10%, rgba(200, 230, 210, 0.3) 0%, transparent 40%);
+      background-color: #f8fafc;
+    }
+    /* Frosted glass effect for the central card */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    /* Custom button shadow for "Guardar ubicación" */
+    .btn-yellow-glow {
+      background: linear-gradient(180deg, #fbdf67 0%, #facc15 100%);
+      box-shadow: 0 4px 15px rgba(250, 204, 21, 0.4);
+    }
+    .sidebar-active {
+      background-color: #f1f5f9;
+      color: #1e293b;
+    }
+  </style>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            laravel: {
+              dark: '#143424', // Dark green header
+              sidebar: '#ffffff',
+              accent: '#facc15', // Yellow
+              muted: '#64748b'
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-main-gradient min-h-screen flex" style="background: radial-gradient(circle at 80% 20%, rgba(220, 245, 230, 0.9) 0%, transparent 50%), radial-gradient(circle at 90% 80%, rgba(255, 235, 150, 0.7) 0%, transparent 50%), radial-gradient(circle at 20% 80%, rgba(240, 250, 245, 0.8) 0%, transparent 50%), radial-gradient(circle at 10% 20%, rgba(255, 245, 200, 0.5) 0%, transparent 40%); background-color: #f8fafc;">
     <div class="mx-auto w-full max-w-2xl space-y-6"
          x-data="{
             clave: {{ Js::from(old('clave', '')) }},
@@ -8,60 +63,18 @@
             activo: {{ old('activo', 1) ? 'true' : 'false' }}
          }">
 
-        {{-- ══════════════ Encabezado con ícono ══════════════ --}}
-        <div class="flex items-start gap-4">
-            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl
-                        bg-gradient-to-br from-emerald-500 to-emerald-700 shadow-lg shadow-emerald-500/25
-                        dark:from-emerald-600 dark:to-emerald-800 dark:shadow-emerald-900/40">
-                <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/>
-                </svg>
-            </div>
-            <div>
-                <p class="text-xs font-semibold uppercase tracking-widest text-amber-600 dark:text-amber-400">
-                    Catálogos · Ubicaciones
-                </p>
-                <h1 class="mt-0.5 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                    Nueva ubicación
-                </h1>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                    La clave identifica a la bodega en folios y reportes.
-                </p>
-            </div>
-        </div>
-
-        {{-- ══════════════ Errores de validación ══════════════ --}}
-        @if ($errors->any())
-            <div class="flex gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800
-                        dark:border-red-800 dark:bg-red-900/30 dark:text-red-300">
-                <svg class="mt-0.5 h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"/>
-                </svg>
-                <div>
-                    <p class="font-semibold">Revisa lo siguiente:</p>
-                    <ul class="mt-1 list-inside list-disc space-y-0.5">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-        @endif
+      <main class="flex-1 flex items-center justify-center p-8 relative overflow-hidden">
+<!-- BEGIN: Form Card -->
+<div class="glass-card w-full max-w-3xl rounded-[2.5rem] shadow-2xl p-10 relative" data-purpose="form-card">
+<h1 class="text-4xl font-bold text-laravel-dark mb-10">Nueva ubicación</h1>
 
         {{-- ══════════════ Formulario ══════════════ --}}
-        <form method="POST" action="{{ route('ubicaciones.store') }}"
-              class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm
-                     dark:border-gray-700 dark:bg-gray-800">
+        <form method="POST" action="{{ route('ubicaciones.store') }}" class="space-y-8">
             @csrf
 
-            {{-- Franja decorativa verde → dorado --}}
-            <div class="h-1.5 bg-gradient-to-r from-emerald-600 via-emerald-500 to-amber-400"></div>
 
-            <div class="space-y-6 p-6 sm:p-8">
+
+
 
                 {{-- Clave + Nombre --}}
                 <div class="grid grid-cols-1 gap-5 sm:grid-cols-3">
@@ -160,9 +173,9 @@
                             </svg>
                         </span>
                         <div>
-                            <p class="text-sm font-semibold text-gray-900 dark:text-white"
+                            <p class="text-laravel-dark font-semibold"
                                x-text="activo ? 'Ubicación activa' : 'Ubicación inactiva'"></p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">
+                            <p class="text-xs text-laravel-muted">
                                 Solo las activas aparecen al capturar entradas y salidas.
                             </p>
                         </div>
@@ -183,29 +196,26 @@
                                      dark:bg-gray-600 dark:peer-checked:bg-emerald-500"></span>
                     </span>
                 </label>
-            </div>
+
 
             {{-- ══════════════ Acciones ══════════════ --}}
-            <div class="flex items-center justify-end gap-3 border-t border-gray-200 bg-gray-50 px-6 py-4
-                        dark:border-gray-700 dark:bg-gray-900/40 sm:px-8">
+            <div class="flex justify-end gap-4 pt-4">
                 <a href="{{ route('ubicaciones.index') }}"
-                   class="rounded-lg px-4 py-2.5 text-sm font-semibold text-gray-600 transition hover:bg-gray-100
-                          dark:text-gray-300 dark:hover:bg-gray-700">
+                   class="px-8 py-3 bg-slate-400 hover:bg-slate-500 text-white font-semibold rounded-xl transition-all shadow-md">
                     Cancelar
                 </a>
-                <button type="submit"
-                        class="inline-flex items-center gap-2 rounded-lg bg-amber-400 px-5 py-2.5 text-sm font-bold text-gray-900 shadow-md shadow-amber-400/30
-                               transition hover:-translate-y-0.5 hover:bg-amber-500 hover:shadow-lg hover:shadow-amber-400/40
-                               focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2
-                               dark:bg-emerald-600 dark:text-white dark:shadow-emerald-900/40 dark:hover:bg-emerald-500
-                               dark:focus-visible:ring-emerald-500 dark:focus-visible:ring-offset-gray-900">
-                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                    </svg>
+                <button class="px-8 py-3 btn-yellow-glow text-laravel-dark font-semibold rounded-xl transition-all hover:opacity-90"  type="submit">
+
                     Guardar ubicación
                 </button>
             </div>
         </form>
-    </div>
+</div>
+<!-- END: Form Card -->
+</main>
+<!-- END: Main Content -->
+
+
+</body>
 
 </x-layouts.app>

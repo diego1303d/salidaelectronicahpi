@@ -4,8 +4,11 @@ use App\Http\Controllers\Settings;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\VariedadesController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EntradaController;
+use App\Http\Controllers\InventarioController;
+   use App\Http\Controllers\SalidaController;
 
-
+   
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
@@ -57,7 +60,24 @@ Route::patch('ubicaciones/{ubicacion}/toggle', [App\Http\Controllers\Ubicaciones
 Route::get('/ubicaciones/{ubicacion}/editar', [App\Http\Controllers\UbicacionesController::class, 'edit'])->name('ubicaciones.edit');
 Route::put('/ubicaciones/{ubicacion}', [App\Http\Controllers\UbicacionesController::class, 'update'])->name('ubicaciones.update');
 
+//Entradas
 
+
+
+Route::get('inventario', [InventarioController::class, 'index'])
+    ->name('inventario.index');
+
+
+Route::resource('entradas', EntradaController::class)
+    ->only(['index', 'create', 'store', 'show']);
+
+
+
+    //salidas
+
+ 
+Route::resource('salidas', SalidaController::class)
+    ->only(['index', 'create', 'store', 'show']);
 
 });
 

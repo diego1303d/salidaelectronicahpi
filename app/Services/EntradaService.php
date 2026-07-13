@@ -52,11 +52,10 @@ class EntradaService
 
                 Inventario::where('ubicacion_id', $entrada->ubicacion_id)
                     ->where('variedad_id', $d['variedad_id'])
-                    ->update([
-                        'toneladas' => DB::raw('toneladas + ' . (float) $d['toneladas']),
-                        'bultos' => DB::raw('bultos + ' . (int) $d['bultos']),
-                    ]);
-
+                  ->incrementEach([
+            'toneladas' => $d['toneladas'],
+            'bultos'    => $d['bultos'],
+        ]);
                 MovimientoInventario::create([
                     'ubicacion_id' => $entrada->ubicacion_id,
                     'variedad_id' => $d['variedad_id'],

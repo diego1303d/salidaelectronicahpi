@@ -27,4 +27,7 @@ class EntradaDetalle extends Model
     {
         return $this->belongsTo(Variedad::class, 'variedad_id');
     }
+
+
+    
 }

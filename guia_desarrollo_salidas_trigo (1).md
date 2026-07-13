@@ -45,13 +45,13 @@ Empieza por lo más simple para calentar motores. Son CRUDs normales como los qu
 
 Sin inventario no hay nada que vender ni traspasar, así que esto va antes que las salidas.
 
-* \[ ] Formulario de nueva entrada: bodega, fecha, origen (proveedor/campo), observaciones
-* \[ ] Tabla dinámica de partidas: variedad + toneladas + bultos (agregar/quitar renglones con JS)
-* \[ ] FormRequest de validación: bodega existente y activa, al menos una partida, toneladas > 0, bultos > 0
-* \[ ] Controlador que llame a `EntradaService::crear()` dentro de try/catch
-* \[ ] Listado de entradas con filtros por bodega y rango de fechas
-* \[ ] Vista de detalle de una entrada (folio, partidas, quién la capturó)
-* \[ ] **Pantalla de Inventario actual**: tabla bodega × variedad con toneladas y bultos
+* \[ x] Formulario de nueva entrada: bodega, fecha, origen (proveedor/campo), observaciones
+* \[x ] Tabla dinámica de partidas: variedad + toneladas + bultos (agregar/quitar renglones con JS)
+* \[x ] FormRequest de validación: bodega existente y activa, al menos una partida, toneladas > 0, bultos > 0
+* \[x ] Controlador que llame a `EntradaService::crear()` dentro de try/catch
+* \[x ] Listado de entradas con filtros por bodega y rango de fechas
+* \[ x] Vista de detalle de una entrada (folio, partidas, quién la capturó)
+* \[ x] **Pantalla de Inventario actual**: tabla bodega × variedad con toneladas y bultos
 (consulta directa a la tabla `inventarios` con sus relaciones)
 
 **Meta de la fase:** puedes meter trigo a cualquier bodega y ver el inventario actualizado en pantalla.
@@ -62,26 +62,26 @@ Sin inventario no hay nada que vender ni traspasar, así que esto va antes que l
 
 El corazón del sistema. Aquí se captura el documento y se descuenta el inventario.
 
-* \[ ] Formulario de nueva salida con campos **dinámicos según el tipo**:
+* \[ x] Formulario de nueva salida con campos **dinámicos según el tipo**:
 
-  * \[ ] Tipo: venta o traspaso (radio o select)
-  * \[ ] Si es **venta**: mostrar cliente (nombre), teléfono y forma de pago (contado / crédito / 50-50)
-  * \[ ] Si es **traspaso**: mostrar bodega destino (ocultar cliente y forma de pago)
-  * \[ ] Bodega origen, fecha, observaciones (siempre visibles)
-* \[ ] Tabla de partidas: variedad, toneladas, bultos, precio por tonelada (precio oculto en traspasos)
-* \[ ] Mostrar en vivo los **totales** (toneladas, bultos, importe) con JS conforme capturan
-* \[ ] Validación con FormRequest:
+  * \[ x] Tipo: venta o traspaso (radio o select)
+  * \[ x] Si es **venta**: mostrar cliente (nombre), teléfono y forma de pago (contado / crédito / 50-50)
+  * \[ x] Si es **traspaso**: mostrar bodega destino (ocultar cliente y forma de pago)
+  * \[x ] Bodega origen, fecha, observaciones (siempre visibles)
+* \[x ] Tabla de partidas: variedad, toneladas, bultos, precio por tonelada (precio oculto en traspasos)
+* \[ x] Mostrar en vivo los **totales** (toneladas, bultos, importe) con JS conforme capturan
+* \[ x] Validación con FormRequest:
 
-  * \[ ] Si tipo = venta → `cliente\_nombre` y `forma\_pago` requeridos
-  * \[ ] Si tipo = traspaso → `ubicacion\_destino\_id` requerida y diferente a la origen
-  * \[ ] Al menos una partida; toneladas y bultos mayores a 0
-  * \[ ] **Validar congruencia bultos vs toneladas** usando `Variedad::bultosEsperados()`
+  * \[ x] Si tipo = venta → `cliente\_nombre` y `forma\_pago` requeridos
+  * \[ x] Si tipo = traspaso → `ubicacion\_destino\_id` requerida y diferente a la origen
+  * \[x ] Al menos una partida; toneladas y bultos mayores a 0
+  * \[ x] **Validar congruencia bultos vs toneladas** usando `Variedad::bultosEsperados()`
 (ej. si el bulto pesa 50 kg, 10 toneladas ≈ 200 bultos; avisar si se desvía mucho)
-* \[ ] Controlador que llame a `SalidaService::crear()` en try/catch
+* \[x ] Controlador que llame a `SalidaService::crear()` en try/catch
 (si no hay existencia, el servicio lanza excepción con mensaje claro → mostrarlo al usuario)
-* \[ ] Al guardar, redirigir a la vista de detalle mostrando el **folio generado**
-* \[ ] Listado de salidas con filtros: estatus, tipo, bodega, fechas, folio
-* \[ ] Vista de detalle: todos los datos + estatus con color (pendiente amarillo, entregada verde, cancelada rojo)
+* \[x ] Al guardar, redirigir a la vista de detalle mostrando el **folio generado**
+* \[x ] Listado de salidas con filtros: estatus, tipo, bodega, fechas, folio
+* \[ x] Vista de detalle: todos los datos + estatus con color (pendiente amarillo, entregada verde, cancelada rojo)
 
 **Meta de la fase:** creas una venta o traspaso, se genera el folio y el inventario de la bodega origen baja al instante.
 

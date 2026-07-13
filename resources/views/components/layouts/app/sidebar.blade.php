@@ -45,72 +45,18 @@
 
 
   <!-- Entradas -->
-<x-layouts.sidebar-two-level-link-parent title="Entradas" icon="fas-seedling"
-    :active="request()->routeIs('')">
+<x-layouts.sidebar-two-level-link-parent title="Movimientos" icon="fas-seedling"
+    :active="request()->routeIs('Movimientos')">
 
-    <x-layouts.sidebar-two-level-link href="{{ route('Variedad.index') }}" icon='fas-seedling'
-        :active="request()->routeIs('Variedad*')">Variedades</x-layouts.sidebar-two-level-link>
+    <x-layouts.sidebar-two-level-link href="{{ route('entradas.index') }}" icon='fas-seedling'
+        :active="request()->routeIs('Variedad*')">Entradas</x-layouts.sidebar-two-level-link>
 
-
-<x-layouts.sidebar-two-level-link href="{{ route('ubicaciones.index') }}" icon='fas-map'
-        :active="request()->routeIs('ubicaciones*')">Ubicaciones</x-layouts.sidebar-two-level-link>
-    {{-- Aquí luego agregas Ubicaciones cuando armes ese CRUD:
-    <x-layouts.sidebar-two-level-link href="{{ route('ubicaciones.index') }}" icon='fas-warehouse'
-        :active="request()->routeIs('ubicaciones*')">Ubicaciones</x-layouts.sidebar-two-level-link>
-    --}}
-
-</x-layouts.sidebar-two-level-link-parent>
+  <x-layouts.sidebar-two-level-link href="{{ route('salidas.index') }}" icon='fas-seedling'
+        :active="request()->routeIs('salidas*')">Salidas</x-layouts.sidebar-two-level-link>
 
 
-
- <!-- Salidas -->
-<x-layouts.sidebar-two-level-link-parent title="Salidas" icon="fas-folder-open"
-    :active="request()->routeIs('Salidas')">
-
-    <x-layouts.sidebar-two-level-link href="{{ route('Variedad.index') }}" icon='fas-seedling'
-        :active="request()->routeIs('Variedad*')">Variedades</x-layouts.sidebar-two-level-link>
-
-
-<x-layouts.sidebar-two-level-link href="{{ route('ubicaciones.index') }}" icon='fas-map'
-        :active="request()->routeIs('ubicaciones*')">Ubicaciones</x-layouts.sidebar-two-level-link>
-    {{-- Aquí luego agregas Ubicaciones cuando armes ese CRUD:
-    <x-layouts.sidebar-two-level-link href="{{ route('ubicaciones.index') }}" icon='fas-warehouse'
-        :active="request()->routeIs('ubicaciones*')">Ubicaciones</x-layouts.sidebar-two-level-link>
-    --}}
-
-</x-layouts.sidebar-two-level-link-parent>
-
-
-
-<!-- Inventario -->
-<x-layouts.sidebar-two-level-link-parent title="Inventario" icon="fas-folder-open"
-    :active="request()->routeIs('')">
-
-    <x-layouts.sidebar-two-level-link href="{{ route('Variedad.index') }}" icon='fas-seedling'
-        :active="request()->routeIs('Variedad*')">Variedades</x-layouts.sidebar-two-level-link>
-
-
-<x-layouts.sidebar-two-level-link href="{{ route('ubicaciones.index') }}" icon='fas-map'
-        :active="request()->routeIs('ubicaciones*')">Ubicaciones</x-layouts.sidebar-two-level-link>
-    {{-- Aquí luego agregas Ubicaciones cuando armes ese CRUD:
-    <x-layouts.sidebar-two-level-link href="{{ route('ubicaciones.index') }}" icon='fas-warehouse'
-        :active="request()->routeIs('ubicaciones*')">Ubicaciones</x-layouts.sidebar-two-level-link>
-    --}}
-
-</x-layouts.sidebar-two-level-link-parent>
-
-
-
-<!-- Reportes -->
-<x-layouts.sidebar-two-level-link-parent title="Reportes" icon="fas-folder-open"
-    :active="request()->routeIs('')">
-
-    <x-layouts.sidebar-two-level-link href="{{ route('Variedad.index') }}" icon='fas-seedling'
-        :active="request()->routeIs('Variedad*')">Variedades</x-layouts.sidebar-two-level-link>
-
-
-<x-layouts.sidebar-two-level-link href="{{ route('ubicaciones.index') }}" icon='fas-map'
-        :active="request()->routeIs('ubicaciones*')">Ubicaciones</x-layouts.sidebar-two-level-link>
+<x-layouts.sidebar-two-level-link href="{{ route('inventario.index') }}" icon='fas-map'
+        :active="request()->routeIs('inventario*')">Inventario </x-layouts.sidebar-two-level-link>
     {{-- Aquí luego agregas Ubicaciones cuando armes ese CRUD:
     <x-layouts.sidebar-two-level-link href="{{ route('ubicaciones.index') }}" icon='fas-warehouse'
         :active="request()->routeIs('ubicaciones*')">Ubicaciones</x-layouts.sidebar-two-level-link>
@@ -121,8 +67,19 @@
 
 
 
-                <x-layouts.sidebar-link href="{{ route('settings.appearance.edit') }}" icon='fas-gear'
-                    :active="request()->routeIs('settings.appearance*')">Configuración</x-layouts.sidebar-link>
+
+
+
+
+
+
+
+
+
+
+
+
+           
 
                 {{-- Aquí van tus módulos, ejemplo:
                 <x-layouts.sidebar-link href="{{ route('salidas.index') }}" icon='fas-truck'
@@ -141,11 +98,11 @@
         <!-- Botón inferior amarillo -->
         <div class="p-4 shrink-0">
             {{-- Cambia href y texto por tu acción principal, ej. route('salidas.create') --}}
-            <a href="#"
+            <a href="{{ route('salidas.create') }}"
                 class="flex items-center justify-center gap-2 w-full rounded-xl bg-gold hover:bg-gold-dark text-brand-dark font-bold text-sm py-3 transition-colors duration-200"
                 :class="sidebarOpen ? 'px-4' : 'px-0'">
                 @svg('fas-plus', 'w-4 h-4 shrink-0')
-                <span x-show="sidebarOpen" x-transition class="whitespace-nowrap">Nueva Salida</span>
+                <span     x-show="sidebarOpen" x-transition class="whitespace-nowrap">Nueva Salida</span>
             </a>
         </div>
 

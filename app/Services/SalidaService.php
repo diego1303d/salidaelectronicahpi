@@ -36,7 +36,7 @@ class SalidaService
      * ]
      *
      * $detalles = [
-     *   ['variedad_id' => 1, 'toneladas' => 10.500, 'bultos' => 210, 'precio_tonelada' => 4800.00],
+     *   ['variedad_id' => 1, 'toneladas' => '10.500', 'bultos' => 210, 'precio_tonelada' => '4800.00'],
      *   ...
      * ]
      */
@@ -57,18 +57,13 @@ class SalidaService
                 'usuario_id' => $usuario->id,
             ]);
 
-            $totalToneladas = 0.0;
-            $totalBultos = 0;
-            $totalImporte = 0.0;
-
             foreach ($detalles as $d) {
-                $detalle = $salida->detalles()->create($d);
-                $detalle->refresh(); // trae el 'importe' calculado por MySQL
+                $salida->detalles()->create($d);
 
                 $this->descontarInventario(
                     (int) $salida->ubicacion_origen_id,
                     (int) $d['variedad_id'],
-                    (float) $d['toneladas'],
+                    $d['toneladas'],
                     (int) $d['bultos'],
                 );
 
@@ -78,22 +73,20 @@ class SalidaService
                     'tipo' => $salida->tipo === SalidaTipo::Venta
                         ? TipoMovimiento::SalidaVenta
                         : TipoMovimiento::SalidaTraspaso,
-                    'toneladas' => -$d['toneladas'],
+                    'toneladas' => '-' . $d['toneladas'], // negativo sin pasar por float
                     'bultos' => -$d['bultos'],
                     'referencia_tipo' => 'salida',
                     'referencia_id' => $salida->id,
                     'usuario_id' => $usuario->id,
                 ]);
-
-                $totalToneladas += (float) $d['toneladas'];
-                $totalBultos += (int) $d['bultos'];
-                $totalImporte += (float) $detalle->importe;
             }
 
+            // Totales calculados por MySQL sobre DECIMAL: exactos siempre.
+            // El importe lo calcula la columna generada; en traspasos suma 0.
             $salida->update([
-                'total_toneladas' => $totalToneladas,
-                'total_bultos' => $totalBultos,
-                'total_importe' => $totalImporte,
+                'total_toneladas' => $salida->detalles()->sum('toneladas'),
+                'total_bultos'    => $salida->detalles()->sum('bultos'),
+                'total_importe'   => $salida->detalles()->sum('importe'),
             ]);
 
             $salida->historial()->create([
@@ -141,7 +134,7 @@ class SalidaService
                     $this->abonarInventario(
                         (int) $salida->ubicacion_destino_id,
                         (int) $detalle->variedad_id,
-                        (float) $detalle->toneladas,
+                        $detalle->toneladas,
                         (int) $detalle->bultos,
                     );
 
@@ -201,7 +194,7 @@ class SalidaService
                 $this->abonarInventario(
                     (int) $salida->ubicacion_origen_id,
                     (int) $detalle->variedad_id,
-                    (float) $detalle->toneladas,
+                    $detalle->toneladas,
                     (int) $detalle->bultos,
                 );
 
@@ -234,19 +227,20 @@ class SalidaService
     // ------------------------------------------------------------------
 
     /**
-     * Descuenta del inventario validando existencia en el mismo UPDATE.
-     * Si no hay suficiente (o no existe el renglon), no afecta filas
-     * y lanzamos excepcion => rollback de toda la transaccion.
+     * Descuenta del inventario validando existencia en el mismo UPDATE
+     * (check-and-act atomico). Si no alcanza o no existe el renglon,
+     * no afecta filas y lanzamos excepcion => rollback de TODO.
      */
-    private function descontarInventario(int $ubicacionId, int $variedadId, float $toneladas, int $bultos): void
+    private function descontarInventario(int $ubicacionId, int $variedadId, int|float|string $toneladas, int $bultos): void
     {
         $afectadas = Inventario::where('ubicacion_id', $ubicacionId)
             ->where('variedad_id', $variedadId)
             ->where('toneladas', '>=', $toneladas)
             ->where('bultos', '>=', $bultos)
-            ->update([
-                'toneladas' => DB::raw('toneladas - ' . (float) $toneladas),
-                'bultos' => DB::raw('bultos - ' . (int) $bultos),
+             ->toBase()
+            ->decrementEach([
+                'toneladas' => $toneladas,
+                'bultos'    => $bultos,
             ]);
 
         if ($afectadas === 0) {
@@ -257,10 +251,10 @@ class SalidaService
     }
 
     /**
-     * Suma al inventario; crea el renglon si la bodega aun no tiene
-     * esa variedad (firstOrCreate + lock para evitar carreras).
+     * Suma al inventario; crea el renglon en cero si la bodega
+     * aun no tiene esa variedad.
      */
-    private function abonarInventario(int $ubicacionId, int $variedadId, float $toneladas, int $bultos): void
+    private function abonarInventario(int $ubicacionId, int $variedadId, int|float|string $toneladas, int $bultos): void
     {
         Inventario::firstOrCreate(
             ['ubicacion_id' => $ubicacionId, 'variedad_id' => $variedadId],
@@ -269,9 +263,9 @@ class SalidaService
 
         Inventario::where('ubicacion_id', $ubicacionId)
             ->where('variedad_id', $variedadId)
-            ->update([
-                'toneladas' => DB::raw('toneladas + ' . (float) $toneladas),
-                'bultos' => DB::raw('bultos + ' . (int) $bultos),
+            ->incrementEach([
+                'toneladas' => $toneladas,
+                'bultos'    => $bultos,
             ]);
     }
 }

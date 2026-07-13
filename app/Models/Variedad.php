@@ -32,12 +32,8 @@ class Variedad extends Model
      * Bultos esperados para X toneladas segun el peso del bulto.
      * Devuelve null si la variedad no tiene peso_bulto_kg configurado.
      */
-    public function bultosEsperados(float $toneladas): ?int
-    {
-        if (!$this->peso_bulto_kg || $this->peso_bulto_kg <= 0) {
-            return null;
-        }
-
-        return (int) round(($toneladas * 1000) / (float) $this->peso_bulto_kg);
-    }
+  public function bultosEsperados(float $toneladas): int
+{
+    return (int) round($toneladas * 1000 / $this->peso_bulto_kg);
+}
 }

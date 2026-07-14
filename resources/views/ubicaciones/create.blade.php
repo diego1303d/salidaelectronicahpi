@@ -1,61 +1,183 @@
 <x-layouts.app>
 
-   <head>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>Nueva Ubicación - Laravel Dashboard</title>
-<!-- Tailwind CSS v3 CDN -->
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<!-- Google Fonts for Inter -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-<style data-purpose="custom-styles">
-    body {
-      font-family: 'Inter', sans-serif;
-    }
-    /* Main background gradient matching the mockup */
-    .bg-main-gradient {
-      background: radial-gradient(circle at 70% 30%, rgba(220, 245, 230, 0.6) 0%, rgba(255, 255, 255, 1) 60%),
-                  radial-gradient(circle at 90% 90%, rgba(255, 235, 150, 0.4) 0%, transparent 50%),
-                  radial-gradient(circle at 10% 10%, rgba(200, 230, 210, 0.3) 0%, transparent 40%);
-      background-color: #f8fafc;
-    }
-    /* Frosted glass effect for the central card */
-    .glass-card {
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-    /* Custom button shadow for "Guardar ubicación" */
-    .btn-yellow-glow {
-      background: linear-gradient(180deg, #fbdf67 0%, #facc15 100%);
-      box-shadow: 0 4px 15px rgba(250, 204, 21, 0.4);
-    }
-    .sidebar-active {
-      background-color: #f1f5f9;
-      color: #1e293b;
-    }
-  </style>
-<script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            laravel: {
-              dark: '#143424', // Dark green header
-              sidebar: '#ffffff',
-              accent: '#facc15', // Yellow
-              muted: '#64748b'
-            }
-          }
+    <style>
+        /* ══════════════ Escenario con gradiente (fondo del mockup) ══════════════ */
+        .ubi-scene {
+            min-height: 80vh;
+            padding: 2.5rem 2rem;
+            border-radius: 1.5rem;
+            background:
+                radial-gradient(circle at 80% 15%, rgba(209, 250, 229, 0.90) 0%, transparent 50%),
+                radial-gradient(circle at 92% 85%, rgba(253, 230, 138, 0.55) 0%, transparent 45%),
+                radial-gradient(circle at 12% 80%, rgba(236, 253, 245, 0.90) 0%, transparent 50%),
+                radial-gradient(circle at 8% 15%, rgba(254, 243, 199, 0.50) 0%, transparent 40%),
+                #f8fafc;
         }
-      }
-    }
-  </script>
-</head>
 
-<body class="bg-main-gradient min-h-screen flex" style="background: radial-gradient(circle at 80% 20%, rgba(220, 245, 230, 0.9) 0%, transparent 50%), radial-gradient(circle at 90% 80%, rgba(255, 235, 150, 0.7) 0%, transparent 50%), radial-gradient(circle at 20% 80%, rgba(240, 250, 245, 0.8) 0%, transparent 50%), radial-gradient(circle at 10% 20%, rgba(255, 245, 200, 0.5) 0%, transparent 40%); background-color: #f8fafc;">
-    <div class="mx-auto w-full max-w-2xl space-y-6"
+        /* ══════════════ Tarjeta de vidrio esmerilado ══════════════ */
+        .ubi-card {
+            position: relative;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.55);
+            border-radius: 2rem;
+            padding: 2.5rem;
+            box-shadow: 0 25px 60px -15px rgba(20, 52, 36, 0.18);
+            overflow: hidden;
+        }
+        /* Franja decorativa verde → dorado en la parte superior */
+        .ubi-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #059669 0%, #34d399 45%, #facc15 100%);
+        }
+
+        /* ══════════════ Encabezado con insignia ══════════════ */
+        .ubi-header  { display: flex; align-items: center; gap: 1rem; margin-bottom: 2.25rem; }
+        .ubi-badge   {
+            width: 3.25rem; height: 3.25rem; flex-shrink: 0;
+            border-radius: 1rem;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.35);
+        }
+        .ubi-badge svg { width: 1.6rem; height: 1.6rem; }
+        .ubi-title    { font-size: 2.15rem; font-weight: 700; color: #143424; line-height: 1.1; }
+        .ubi-subtitle { color: #64748b; font-size: 0.875rem; margin-top: 0.3rem; }
+
+        /* ══════════════ Rejilla: Clave 2 / Nombre 4 / Dirección 6 ══════════════ */
+        .ubi-grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+        @media (min-width: 1024px) {
+            .ubi-grid  { grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: start; }
+            .ubi-col-2 { grid-column: span 2; }
+            .ubi-col-4 { grid-column: span 4; }
+            .ubi-col-6 { grid-column: span 6; }
+        }
+
+        /* ══════════════ Campos ══════════════ */
+        .ubi-form > * + * { margin-top: 2rem; }
+
+        .ubi-label { display: block; font-size: 0.875rem; font-weight: 600; color: #1f2937; margin-bottom: 0.4rem; }
+        .ubi-req   { color: #ef4444; }
+        .ubi-opt   { font-size: 0.75rem; font-weight: 400; color: #94a3b8; margin-left: 0.25rem; }
+
+        .ubi-field          { position: relative; }
+        .ubi-field .ubi-icon {
+            position: absolute; left: 0.8rem; top: 0.78rem;
+            width: 1.1rem; height: 1.1rem;
+            color: #94a3b8; pointer-events: none;
+        }
+
+        .ubi-input {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 0.65rem;
+            background: #fff;
+            padding: 0.68rem 0.8rem 0.68rem 2.5rem;
+            font-size: 0.875rem;
+            font-family: inherit;
+            color: #111827;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        .ubi-input::placeholder { color: #9ca3af; }
+        .ubi-input:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18);
+        }
+        .ubi-input.has-error { border-color: #f87171; }
+        textarea.ubi-input   { resize: none; }
+
+        .ubi-clave { text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em; }
+        .ubi-hint  { margin-top: 0.3rem; font-size: 0.75rem; color: #94a3b8; }
+        .ubi-error { margin-top: 0.3rem; font-size: 0.75rem; font-weight: 500; color: #dc2626; }
+
+        /* ══════════════ Panel de estatus (cambia con el toggle) ══════════════ */
+        .ubi-status {
+            display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+            border: 1px solid transparent;
+            border-radius: 0.9rem;
+            padding: 0.9rem 1rem;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+        .ubi-status.panel-on  { border-color: #a7f3d0; background: rgba(209, 250, 229, 0.55); }
+        .ubi-status.panel-off { border-color: #e5e7eb; background: #f8fafc; }
+
+        .ubi-status-icon {
+            width: 2.25rem; height: 2.25rem; flex-shrink: 0;
+            border-radius: 0.6rem;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+        .ubi-status-icon svg  { width: 1.25rem; height: 1.25rem; }
+        .panel-on  .ubi-status-icon { background: #d1fae5; color: #059669; }
+        .panel-off .ubi-status-icon { background: #e5e7eb; color: #9ca3af; }
+
+        .ubi-status-title { font-weight: 600; color: #143424; }
+        .ubi-status-desc  { font-size: 0.75rem; color: #64748b; }
+
+        /* ══════════════ Interruptor (switch) ══════════════ */
+        .ubi-switch { position: relative; display: inline-flex; flex-shrink: 0; }
+        .ubi-switch input[type="checkbox"] {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            margin: 0; opacity: 0; cursor: pointer;
+        }
+        .ubi-switch .track {
+            display: block; position: relative;
+            width: 2.75rem; height: 1.5rem;
+            border-radius: 9999px;
+            background: #cbd5e1;
+            transition: background 0.2s ease;
+        }
+        .ubi-switch .track::after {
+            content: "";
+            position: absolute; top: 2px; left: 2px;
+            width: 1.25rem; height: 1.25rem;
+            border-radius: 9999px;
+            background: #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+            transition: transform 0.2s ease;
+        }
+        .ubi-switch input[type="checkbox"]:checked + .track        { background: #059669; }
+        .ubi-switch input[type="checkbox"]:checked + .track::after { transform: translateX(1.25rem); }
+        .ubi-switch input[type="checkbox"]:focus-visible + .track  { box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.35); }
+
+        /* ══════════════ Botones ══════════════ */
+        .ubi-actions { display: flex; justify-content: flex-end; gap: 1rem; padding-top: 0.5rem; }
+
+        .btn-cancel {
+            display: inline-flex; align-items: center;
+            padding: 0.8rem 2rem;
+            border-radius: 0.9rem;
+            font-weight: 600; font-size: 0.95rem;
+            color: #fff; text-decoration: none;
+            background: #94a3b8;
+            box-shadow: 0 4px 12px rgba(100, 116, 139, 0.30);
+            transition: background 0.2s ease;
+        }
+        .btn-cancel:hover { background: #64748b; }
+
+        .btn-gold {
+            padding: 0.8rem 2rem;
+            border: none; border-radius: 0.9rem;
+            font-weight: 700; font-size: 0.95rem; font-family: inherit;
+            color: #143424; cursor: pointer;
+            background: linear-gradient(180deg, #fbdf67 0%, #facc15 100%);
+            box-shadow: 0 6px 18px rgba(250, 204, 21, 0.45);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .btn-gold:hover  { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(250, 204, 21, 0.55); }
+        .btn-gold:active { transform: translateY(0); }
+    </style>
+
+    <div class="ubi-scene"
          x-data="{
             clave: {{ Js::from(old('clave', '')) }},
             nombre: {{ Js::from(old('nombre', '')) }},
@@ -63,29 +185,42 @@
             activo: {{ old('activo', 1) ? 'true' : 'false' }}
          }">
 
-      <main class="flex-1 flex items-center justify-center p-8 relative overflow-hidden">
-<!-- BEGIN: Form Card -->
-<div class="glass-card w-full max-w-3xl rounded-[2.5rem] shadow-2xl p-10 relative" data-purpose="form-card">
-<h1 class="text-4xl font-bold text-laravel-dark mb-10">Nueva ubicación</h1>
+        <div class="ubi-card" data-purpose="form-card">
 
-        {{-- ══════════════ Formulario ══════════════ --}}
-        <form method="POST" action="{{ route('ubicaciones.store') }}" class="space-y-8">
-            @csrf
+            {{-- ══════════════ Encabezado ══════════════ --}}
+            <div class="ubi-header">
+                <span class="ubi-badge">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/>
+                    </svg>
+                </span>
+                <div>
+                    <h1 class="ubi-title">Nueva ubicación</h1>
+                    <p class="ubi-subtitle">Registra una bodega para capturar entradas y salidas.</p>
+                </div>
+            </div>
 
+            {{-- ══════════════ Formulario ══════════════ --}}
+            <form method="POST" action="{{ route('ubicaciones.store') }}" class="ubi-form">
+                @csrf
 
-
-
-
-                {{-- Clave + Nombre --}}
-                <div class="grid grid-cols-1 gap-5 sm:grid-cols-3">
+                {{-- Clave + Nombre + Dirección en una sola fila (se apilan en pantallas chicas) --}}
+                <div class="ubi-grid">
 
                     {{-- Clave --}}
-                    <div>
-                        <label for="clave" class="mb-1.5 block text-sm font-semibold text-gray-900 dark:text-white">
-                            Clave <span class="text-red-500">*</span>
+                    <div class="ubi-col-2">
+                        <label for="clave" class="ubi-label">
+                            Clave <span class="ubi-req">*</span>
                         </label>
-                        <div class="relative">
-
+                        <div class="ubi-field">
+                            <svg class="ubi-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z"/>
+                            </svg>
                             <input type="text"
                                    id="clave"
                                    name="clave"
@@ -95,26 +230,24 @@
                                    maxlength="10"
                                    autofocus
                                    placeholder="BOD"
-                                   class="w-full rounded-lg border py-2.5 pl-9 pr-3 text-sm font-semibold uppercase tracking-wide text-gray-900 placeholder-gray-400 transition
-                                          focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30
-                                          dark:bg-gray-900 dark:text-white dark:placeholder-gray-600
-                                          {{ $errors->has('clave') ? 'border-red-400 dark:border-red-600' : 'border-gray-300 dark:border-gray-600' }}">
+                                   class="ubi-input ubi-clave {{ $errors->has('clave') ? 'has-error' : '' }}">
                         </div>
-                        <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">
-                            <span x-text="clave.length"></span>/10 caracteres
-                        </p>
+                        <p class="ubi-hint"><span x-text="clave.length"></span>/10 caracteres</p>
                         @error('clave')
-                            <p class="mt-1 text-xs font-medium text-red-600 dark:text-red-400">{{ $message }}</p>
+                            <p class="ubi-error">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- Nombre --}}
-                    <div class="sm:col-span-2">
-                        <label for="nombre" class="mb-1.5 block text-sm font-semibold text-gray-900 dark:text-white">
-                            Nombre de la ubicación <span class="text-red-500">*</span>
+                    <div class="ubi-col-4">
+                        <label for="nombre" class="ubi-label">
+                            Nombre de la ubicación <span class="ubi-req">*</span>
                         </label>
-                        <div class="relative">
-
+                        <div class="ubi-field">
+                            <svg class="ubi-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"/>
+                            </svg>
                             <input type="text"
                                    id="nombre"
                                    name="nombre"
@@ -122,100 +255,81 @@
                                    required
                                    maxlength="100"
                                    placeholder="Ej. Bodega Villagrán"
-                                   class="w-full rounded-lg border py-2.5 pl-9 pr-3 text-sm text-gray-900 placeholder-gray-400 transition
-                                          focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30
-                                          dark:bg-gray-900 dark:text-white dark:placeholder-gray-600
-                                          {{ $errors->has('nombre') ? 'border-red-400 dark:border-red-600' : 'border-gray-300 dark:border-gray-600' }}">
+                                   class="ubi-input {{ $errors->has('nombre') ? 'has-error' : '' }}">
                         </div>
                         @error('nombre')
-                            <p class="mt-1 text-xs font-medium text-red-600 dark:text-red-400">{{ $message }}</p>
+                            <p class="ubi-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Dirección --}}
+                    <div class="ubi-col-6">
+                        <label for="direccion" class="ubi-label">
+                            Dirección
+                            <span class="ubi-opt">(opcional)</span>
+                        </label>
+                        <div class="ubi-field">
+                            <svg class="ubi-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/>
+                            </svg>
+                            <textarea id="direccion"
+                                      name="direccion"
+                                      x-model="direccion"
+                                      rows="2"
+                                      maxlength="255"
+                                      placeholder="Calle, número, colonia, municipio…"
+                                      class="ubi-input {{ $errors->has('direccion') ? 'has-error' : '' }}"></textarea>
+                        </div>
+                        @error('direccion')
+                            <p class="ubi-error">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
 
-                {{-- Dirección --}}
-                <div>
-                    <label for="direccion" class="mb-1.5 block text-sm font-semibold text-gray-900 dark:text-white">
-                        Dirección
-                        <span class="ml-1 text-xs font-normal text-gray-400 dark:text-gray-500">(opcional)</span>
-                    </label>
-                    <div class="relative">
-
-                        <textarea id="direccion"
-                                  name="direccion"
-                                  x-model="direccion"
-                                  rows="2"
-                                  maxlength="255"
-                                  placeholder="Calle, número, colonia, municipio…"
-                                  class="w-full resize-none rounded-lg border py-2.5 pl-9 pr-3 text-sm text-gray-900 placeholder-gray-400 transition
-                                         focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30
-                                         dark:bg-gray-900 dark:text-white dark:placeholder-gray-600
-                                         {{ $errors->has('direccion') ? 'border-red-400 dark:border-red-600' : 'border-gray-300 dark:border-gray-600' }}"></textarea>
-                    </div>
-                    @error('direccion')
-                        <p class="mt-1 text-xs font-medium text-red-600 dark:text-red-400">{{ $message }}</p>
-                    @enderror
-                </div>
-
                 {{-- Estatus (activo = 1, inactivo = 0) — el panel cambia de color con el toggle --}}
-                <label class="flex cursor-pointer items-center justify-between gap-4 rounded-xl border px-4 py-3.5 transition"
-                       :class="activo
-                                ? 'border-emerald-200 bg-emerald-50/60 dark:border-emerald-800 dark:bg-emerald-900/20'
-                                : 'border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900/40'">
-                    <div class="flex items-center gap-3">
-                        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition"
-                              :class="activo
-                                        ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400'
-                                        : 'bg-gray-200 text-gray-400 dark:bg-gray-700 dark:text-gray-500'">
-                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <label class="ubi-status"
+                       :class="activo ? 'panel-on' : 'panel-off'">
+                    <div style="display:flex; align-items:center; gap:0.75rem;">
+                        <span class="ubi-status-icon">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                       d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                             </svg>
                         </span>
                         <div>
-                            <p class="text-laravel-dark font-semibold"
+                            <p class="ubi-status-title"
                                x-text="activo ? 'Ubicación activa' : 'Ubicación inactiva'"></p>
-                            <p class="text-xs text-laravel-muted">
+                            <p class="ubi-status-desc">
                                 Solo las activas aparecen al capturar entradas y salidas.
                             </p>
                         </div>
                     </div>
 
                     {{-- El hidden manda 0 si el checkbox va desmarcado; marcado manda 1 --}}
-                    <span class="relative inline-flex shrink-0 items-center">
+                    <span class="ubi-switch">
                         <input type="hidden" name="activo" value="0">
                         <input type="checkbox"
                                name="activo"
                                value="1"
-                               x-model="activo"
-                               class="peer sr-only">
-                        <span class="peer h-6 w-11 rounded-full bg-gray-300 transition
-                                     after:absolute after:left-0.5 after:top-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow after:transition-all
-                                     peer-checked:bg-emerald-600 peer-checked:after:translate-x-5
-                                     peer-focus-visible:ring-2 peer-focus-visible:ring-emerald-500/50
-                                     dark:bg-gray-600 dark:peer-checked:bg-emerald-500"></span>
+                               x-model="activo">
+                        <span class="track"></span>
                     </span>
                 </label>
 
-
-            {{-- ══════════════ Acciones ══════════════ --}}
-            <div class="flex justify-end gap-4 pt-4">
-                <a href="{{ route('ubicaciones.index') }}"
-                   class="px-8 py-3 bg-slate-400 hover:bg-slate-500 text-white font-semibold rounded-xl transition-all shadow-md">
-                    Cancelar
-                </a>
-                <button class="px-8 py-3 btn-yellow-glow text-laravel-dark font-semibold rounded-xl transition-all hover:opacity-90"  type="submit">
-
-                    Guardar ubicación
-                </button>
-            </div>
-        </form>
-</div>
-<!-- END: Form Card -->
-</main>
-<!-- END: Main Content -->
-
-
-</body>
+                {{-- ══════════════ Acciones ══════════════ --}}
+                <div class="ubi-actions">
+                    <a href="{{ route('ubicaciones.index') }}" class="btn-cancel">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="btn-gold">
+                        Guardar ubicación
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
 </x-layouts.app>

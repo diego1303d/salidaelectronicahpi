@@ -1,19 +1,7 @@
 <x-layouts.app>
 
     <style>
-        /* ══════════════ Escenario con gradiente (fondo del mockup) ══════════════ */
-        .ubi-scene {
-            min-height: 80vh;
-            padding: 2.5rem 2rem;
-            border-radius: 1.5rem;
-            background:
-                radial-gradient(circle at 80% 15%, rgba(209, 250, 229, 0.90) 0%, transparent 50%),
-                radial-gradient(circle at 92% 85%, rgba(253, 230, 138, 0.55) 0%, transparent 45%),
-                radial-gradient(circle at 12% 80%, rgba(236, 253, 245, 0.90) 0%, transparent 50%),
-                radial-gradient(circle at 8% 15%, rgba(254, 243, 199, 0.50) 0%, transparent 40%),
-                #f8fafc;
-        }
-
+    
         /* ══════════════ Tarjeta de vidrio esmerilado ══════════════ */
         .ubi-card {
             position: relative;

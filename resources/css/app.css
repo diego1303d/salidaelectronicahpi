@@ -14,10 +14,10 @@
     /* ===== Paleta de la marca (genera utilidades: bg-brand, text-brand, etc.) ===== */
     --color-brand: #0c3b2e;        /* verde oscuro principal (sidebar / títulos) */
     --color-brand-dark: #082a20;   /* verde casi negro (textos sobre amarillo) */
-    --color-brand-light: #17563f;  /* verde hover / pill activo */
+    --color-brand-light: #ffc20e;  /* verde hover / pill activo */
     --color-gold: #ffc20e;         /* amarillo acento */
     --color-gold-dark: #f0b400;    /* amarillo hover */
-    --color-surface: #f4f4f0;      /* fondo gris cálido del contenido */
+    --color-surface: #f9fafb;      /* fondo gris cálido del contenido */
 
     --sidebar-background: hsl(var(--sidebar-background));
     --sidebar-foreground: hsl(var(--sidebar-foreground));
@@ -63,8 +63,8 @@
     /* El sidebar es verde oscuro SIEMPRE (modo claro y oscuro), como en el diseño */
     :root {
         --sidebar-background: 163 66% 14%;        /* #0c3b2e verde oscuro */
-        --sidebar-foreground: 160 15% 72%;        /* texto de menú apagado */
-        --sidebar-accent: 163 55% 19%;            /* pill del item activo / hover */
+        --sidebar-foreground: 0 0% 100%;        /* texto de menú apagado */
+        --sidebar-accent: 45 100% 53%;            /* pill del item activo /  en amarillo cuando pasa el cursor */
         --sidebar-accent-foreground: 0 0% 100%;   /* texto del item activo: blanco */
         --sidebar-border: 163 45% 20%;
         --sidebar-ring: 45 100% 53%;              /* amarillo */
@@ -130,7 +130,7 @@
 }
 
 .dark .custom-file-input::before {
-    background: #374151;
+    background: #db141e;
     border-color: #4b5563;
     color: #e5e7eb;
 }

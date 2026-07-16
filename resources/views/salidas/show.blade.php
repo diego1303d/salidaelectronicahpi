@@ -48,10 +48,10 @@
                 <thead>
                     <tr class="text-left border-b">
                         <th class="py-1">Variedad</th>
-                        <th class="py-1 text-right">Toneladas</th>
+                        <th class="py-1 text-right">Kilos</th>
                         <th class="py-1 text-right">Bultos</th>
                         @if ($salida->tipo === \App\Enums\SalidaTipo::Venta)
-                            <th class="py-1 text-right">Precio/ton</th>
+                            <th class="py-1 text-right">Precio</th>
                             <th class="py-1 text-right">Importe</th>
                         @endif
                     </tr>

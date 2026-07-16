@@ -11,15 +11,10 @@
             </svg>
         </button>
 
-        <!-- Buscador -->
+     
         <div class="relative w-full max-w-md hidden sm:block">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z" />
-            </svg>
-            <input type="search" placeholder="Buscar..."
-                class="w-full h-10 pl-11 pr-4 rounded-full bg-gray-200/60 dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-200 placeholder-gray-400 border-0 focus:outline-none focus:ring-2 focus:ring-gold transition-shadow">
+
+
         </div>
     </div>
 

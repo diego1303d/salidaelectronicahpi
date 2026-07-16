@@ -29,6 +29,8 @@ class BultosCongruentes implements ValidationRule, DataAwareRule
     {
         // $attribute llega como "detalles.2.bultos" → sacamos el índice del renglón
         preg_match('/detalles\.(\d+)\.bultos/', $attribute, $m);
+
+
         $renglon = $this->data['detalles'][$m[1]] ?? null;
 
         if (! $renglon || empty($renglon['variedad_id']) || empty($renglon['toneladas'])) {
@@ -37,23 +39,35 @@ class BultosCongruentes implements ValidationRule, DataAwareRule
 
         $variedad = Variedad::find($renglon['variedad_id']);
 
+
+
         // Sin variedad válida o sin peso configurado, no podemos verificar
         if (! $variedad || ! $variedad->peso_bulto_kg) {
             return;
         }
+
+
 
         if (! is_numeric($renglon['toneladas']) || ! is_numeric($value)) {
             return;
         }
 
         $esperados  = $variedad->bultosEsperados((float) $renglon['toneladas']);
+
+
+
         $capturados = (int) $value;
+
         $desviacion = abs($capturados - $esperados) / max($esperados, 1);
+
+
+
+
 
         if ($desviacion > self::TOLERANCIA) {
             $fail(
-                "Los bultos no cuadran con las toneladas para {$variedad->nombre}: " .
-                "para {$renglon['toneladas']} t se esperan ~{$esperados} bultos y capturaste {$capturados}. Revisa la captura."
+                "Los bultos no cuadran con los kilos  para {$variedad->nombre}: " .
+                "para {$renglon['toneladas']} KG se esperan  {$esperados} bultos de {$variedad->peso_bulto_kg} KG  cada uno   y capturaste {$capturados} . Revisa la captura."
             );
         }
     }

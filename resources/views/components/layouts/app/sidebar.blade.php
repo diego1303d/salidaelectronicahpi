@@ -41,6 +41,8 @@
         :active="request()->routeIs('ubicaciones*')">Ubicaciones</x-layouts.sidebar-two-level-link>
     --}}
 
+    <x-layouts.sidebar-two-level-link href="{{ route('inventario.index') }}" icon='fas-map'
+        :active="request()->routeIs('inventario*')">Inventario </x-layouts.sidebar-two-level-link>
 </x-layouts.sidebar-two-level-link-parent>
 
 
@@ -55,8 +57,7 @@
         :active="request()->routeIs('salidas*')">Salidas</x-layouts.sidebar-two-level-link>
 
 
-<x-layouts.sidebar-two-level-link href="{{ route('inventario.index') }}" icon='fas-map'
-        :active="request()->routeIs('inventario*')">Inventario </x-layouts.sidebar-two-level-link>
+
     {{-- Aquí luego agregas Ubicaciones cuando armes ese CRUD:
     <x-layouts.sidebar-two-level-link href="{{ route('ubicaciones.index') }}" icon='fas-warehouse'
         :active="request()->routeIs('ubicaciones*')">Ubicaciones</x-layouts.sidebar-two-level-link>
@@ -79,7 +80,7 @@
 
 
 
-           
+
 
                 {{-- Aquí van tus módulos, ejemplo:
                 <x-layouts.sidebar-link href="{{ route('salidas.index') }}" icon='fas-truck'

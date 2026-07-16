@@ -335,3 +335,18 @@ $tipo = SalidaTipo::from($request->input('tipo'));
 * \[ ] Respaldo diario de la BD desde el día uno
 * \[ ] Cuadre periódico: `SUM(movimientos)` = saldo en `inventarios` por bodega/variedad
 
+
+Traer lo ultimo que escribi 
+git pull
+
+
+Al terminar para guardar lo que hice en el trabajo 
+
+git add .
+git commit -m "Avances realizados en la oficina"
+git push
+
+
+composer no lo jala en GitHub 
+por lo que se tiene que instalar 
+composer install

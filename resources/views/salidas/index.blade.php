@@ -79,7 +79,7 @@
                         <th class="px-3 py-2">Tipo</th>
                         <th class="px-3 py-2">Origen</th>
                         <th class="px-3 py-2">Destino / Cliente</th>
-                        <th class="px-3 py-2 text-right">Toneladas</th>
+                        <th class="px-3 py-2 text-right">Kilos</th>
                         <th class="px-3 py-2 text-right">Bultos</th>
                         <th class="px-3 py-2">Estatus</th>
                     </tr>

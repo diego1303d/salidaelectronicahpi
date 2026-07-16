@@ -43,6 +43,7 @@ class StoreSalidaRequest extends FormRequest
             'detalles.*.toneladas'       => ['required', 'numeric', 'gt:0'],
             'detalles.*.bultos'          => ['required', 'integer', 'gt:0'],
             'detalles.*.precio_tonelada' => ['exclude_unless:tipo,venta', 'required', 'numeric', 'gt:0'],
+              'detalles.*.bultos'      => ['required', 'integer', 'gt:0', new BultosCongruentes],
         ];
     }
 
@@ -57,7 +58,7 @@ class StoreSalidaRequest extends FormRequest
             'detalles.*.toneladas'       => 'toneladas',
             'detalles.*.bultos'          => 'bultos',
             'detalles.*.precio_tonelada' => 'precio por tonelada',
-            'detalles.*.bultos' => ['required', 'integer', 'gt:0', new BultosCongruentes],
+
         ];
     }
 
@@ -76,5 +77,5 @@ class StoreSalidaRequest extends FormRequest
      * Validación de congruencia bultos vs toneladas.
      * Corre DESPUÉS de que pasaron las reglas de arriba.
      */
- 
+
 }

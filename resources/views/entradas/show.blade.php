@@ -53,7 +53,7 @@
                 <tr class="border-b border-gray-200 text-left text-xs uppercase tracking-wide
                            text-gray-500 dark:border-gray-700 dark:text-gray-400">
                     <th class="pb-2 pr-3">Variedad</th>
-                    <th class="pb-2 pr-3 text-right">Toneladas</th>
+                    <th class="pb-2 pr-3 text-right">Kilos</th>
                     <th class="pb-2 text-right">Bultos</th>
                 </tr>
             </thead>

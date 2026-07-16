@@ -195,7 +195,7 @@
             $totPorVariedad = [];
             foreach ($variedades as $v) {
                 $totPorVariedad[$v->id] = [
-                    't' => $inventarios->where('variedad_id', $v->id)->sum('toneladas'),
+                    'KG' => $inventarios->where('variedad_id', $v->id)->sum('toneladas'),
                     'b' => $inventarios->where('variedad_id', $v->id)->sum('bultos'),
                 ];
             }
@@ -203,15 +203,15 @@
             $totPorUbicacion = [];
             foreach ($ubicaciones as $u) {
                 $totPorUbicacion[$u->id] = [
-                    't' => $inventarios->where('ubicacion_id', $u->id)->sum('toneladas'),
+                    'KG' => $inventarios->where('ubicacion_id', $u->id)->sum('toneladas'),
                     'b' => $inventarios->where('ubicacion_id', $u->id)->sum('bultos'),
                 ];
             }
 
             // ── Datos para las tarjetas KPI ──
-            $variedadesConStock = collect($totPorVariedad)->filter(fn ($x) => $x['t'] > 0)->count();
-            $bodegaTop   = $ubicaciones->sortByDesc(fn ($u) => $totPorUbicacion[$u->id]['t'])->first();
-            $variedadTop = $variedades->sortByDesc(fn ($v) => $totPorVariedad[$v->id]['t'])->first();
+            $variedadesConStock = collect($totPorVariedad)->filter(fn ($x) => $x['KG'] > 0)->count();
+            $bodegaTop   = $ubicaciones->sortByDesc(fn ($u) => $totPorUbicacion[$u->id]['KG'])->first();
+            $variedadTop = $variedades->sortByDesc(fn ($v) => $totPorVariedad[$v->id]['KG'])->first();
 
             // ── Celda máxima para escalar el mapa de calor ──
             $maxCelda = 0;
@@ -237,7 +237,7 @@
                 </span>
                 <div>
                     <p class="inv-kpi-label">Inventario total</p>
-                    <p class="inv-kpi-value">{{ number_format($granTotalT, 3) }} t</p>
+                    <p class="inv-kpi-value">{{ number_format($granTotalT, 3) }} KG</p>
                     <p class="inv-kpi-sub">{{ number_format($granTotalB) }} bultos</p>
                 </div>
             </div>
@@ -268,7 +268,7 @@
                     <p class="inv-kpi-label">Bodega más cargada</p>
                     <p class="inv-kpi-value">{{ $bodegaTop?->nombre ?? '—' }}</p>
                     <p class="inv-kpi-sub">
-                        {{ $bodegaTop ? number_format($totPorUbicacion[$bodegaTop->id]['t'], 3) . ' t' : '' }}
+                        {{ $bodegaTop ? number_format($totPorUbicacion[$bodegaTop->id]['KG'], 3) . ' KG' : '' }}
                     </p>
                 </div>
             </div>
@@ -284,7 +284,7 @@
                     <p class="inv-kpi-label">Variedad principal</p>
                     <p class="inv-kpi-value">{{ $variedadTop?->nombre ?? '—' }}</p>
                     <p class="inv-kpi-sub">
-                        {{ $variedadTop ? number_format($totPorVariedad[$variedadTop->id]['t'], 3) . ' t' : '' }}
+                        {{ $variedadTop ? number_format($totPorVariedad[$variedadTop->id]['KG'], 3) . ' KG' : '' }}
                     </p>
                 </div>
             </div>
@@ -369,7 +369,7 @@
                                     <td x-show="bodegaFiltro === '' || bodegaFiltro === '{{ $ubicacion->id }}'"
                                         @if ($alpha > 0) style="background: rgba(16, 185, 129, {{ $alpha }});" @endif>
                                         @if ($hayStock)
-                                            <span class="inv-num">{{ number_format($celda->toneladas, 3) }} t</span>
+                                            <span class="inv-num">{{ number_format($celda->toneladas, 3) }} KG</span>
                                             <span class="inv-sub">({{ number_format($celda->bultos) }} bultos)</span>
                                         @else
                                             <span class="inv-dash">—</span>
@@ -379,7 +379,7 @@
 
                                 {{-- Total por variedad --}}
                                 <td>
-                                    <span class="inv-num">{{ number_format($totPorVariedad[$variedad->id]['t'], 3) }} t</span>
+                                    <span class="inv-num">{{ number_format($totPorVariedad[$variedad->id]['KG'], 3) }} KG</span>
                                     <span class="inv-sub">({{ number_format($totPorVariedad[$variedad->id]['b']) }} bultos)</span>
                                 </td>
                             </tr>
@@ -391,13 +391,13 @@
                             <td style="text-align: right;">Total por bodega:</td>
                             @foreach ($ubicaciones as $ubicacion)
                                 <td x-show="bodegaFiltro === '' || bodegaFiltro === '{{ $ubicacion->id }}'">
-                                    <span class="inv-num">{{ number_format($totPorUbicacion[$ubicacion->id]['t'], 3) }} t</span>
+                                    <span class="inv-num">{{ number_format($totPorUbicacion[$ubicacion->id]['KG'], 3) }} KG</span>
                                     <span class="inv-sub">({{ number_format($totPorUbicacion[$ubicacion->id]['b']) }} bultos)</span>
                                 </td>
                             @endforeach
                             {{-- Gran total --}}
                             <td class="inv-gran">
-                                <span class="inv-num">{{ number_format($granTotalT, 3) }} t</span>
+                                <span class="inv-num">{{ number_format($granTotalT, 3) }} KG</span>
                                 <span class="inv-sub">({{ number_format($granTotalB) }} bultos)</span>
                             </td>
                         </tr>

@@ -103,7 +103,7 @@
                     <th class="px-4 py-3">Bodega</th>
                     <th class="px-4 py-3">Origen</th>
                     <th class="px-4 py-3">Variedades</th>
-                    <th class="px-4 py-3 text-right">Toneladas</th>
+                    <th class="px-4 py-3 text-right">Kilos</th>
                     <th class="px-4 py-3 text-right">Bultos</th>
                     <th class="px-4 py-3">Capturó</th>
                 </tr>

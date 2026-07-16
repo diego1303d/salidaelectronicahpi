@@ -16,7 +16,7 @@ class Variedad extends Model
         'activo' => 'boolean',
     ];
 
-    
+
 
     public function inventarios(): HasMany
     {
@@ -34,6 +34,6 @@ class Variedad extends Model
      */
   public function bultosEsperados(float $toneladas): int
 {
-    return (int) round($toneladas * 1000 / $this->peso_bulto_kg);
+    return (int) round($toneladas / $this->peso_bulto_kg);
 }
 }

@@ -119,8 +119,9 @@
                 <div class="overflow-x-auto">
                     <table class="w-full divide-y divide-gray-200 text-sm dark:divide-gray-700">
                         <thead class="bg-gray-50 dark:bg-gray-900/95">
-                            <tr class="text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                             
+                            <tr class="border-b border-gray-200 text-left text-xs uppercase tracking-wide
+                           text-gray-500 dark:border-gray-700 dark:text-gray-400">
+
                               <th class="w-12 px-4 py-3">ID</th>
                                 <th class="px-4 py-3">Variedad</th>
                                 <th class="px-4 py-3">Categoría</th>

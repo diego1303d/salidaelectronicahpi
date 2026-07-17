@@ -28,7 +28,7 @@
 
                 <!-- Catalogos -->
 <x-layouts.sidebar-two-level-link-parent title="Catálogos" icon="fas-folder-open"
-    :active="request()->routeIs('')">
+    :active="request()->routeIs('Variedad*','ubicaciones*','inventario*')">
 
     <x-layouts.sidebar-two-level-link href="{{ route('Variedad.index') }}" icon='fas-seedling'
         :active="request()->routeIs('Variedad*')">Variedades</x-layouts.sidebar-two-level-link>
@@ -41,19 +41,19 @@
         :active="request()->routeIs('ubicaciones*')">Ubicaciones</x-layouts.sidebar-two-level-link>
     --}}
 
-    <x-layouts.sidebar-two-level-link href="{{ route('inventario.index') }}" icon='fas-map'
+    <x-layouts.sidebar-two-level-link href="{{ route('inventario.index') }}" icon='fas-boxes'
         :active="request()->routeIs('inventario*')">Inventario </x-layouts.sidebar-two-level-link>
 </x-layouts.sidebar-two-level-link-parent>
 
 
   <!-- Entradas -->
 <x-layouts.sidebar-two-level-link-parent title="Movimientos" icon="fas-seedling"
-    :active="request()->routeIs('Movimientos')">
+    :active="request()->routeIs('Movimientos','entradas*','salidas*')">
 
-    <x-layouts.sidebar-two-level-link href="{{ route('entradas.index') }}" icon='fas-seedling'
-        :active="request()->routeIs('Variedad*')">Entradas</x-layouts.sidebar-two-level-link>
+    <x-layouts.sidebar-two-level-link href="{{ route('entradas.index') }}" icon='fas-plus-circle'
+        :active="request()->routeIs('entradas*')" >Entradas</x-layouts.sidebar-two-level-link>
 
-  <x-layouts.sidebar-two-level-link href="{{ route('salidas.index') }}" icon='fas-seedling'
+  <x-layouts.sidebar-two-level-link href="{{ route('salidas.index') }}" icon='fas-minus-circle'
         :active="request()->routeIs('salidas*')">Salidas</x-layouts.sidebar-two-level-link>
 
 
@@ -65,7 +65,7 @@
 
 </x-layouts.sidebar-two-level-link-parent>
 
-
+<!-- Movimientos (Padre) -->
 
 
 

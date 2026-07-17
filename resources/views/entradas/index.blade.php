@@ -1,15 +1,18 @@
-<x-layouts.app title="Entradas">
+<x-layouts.app >
 
-    <x-page-header
-        title="Entradas de inventario"
-        subtitle="Ingresos de trigo a las bodegas" />
-
-    {{-- Mensajes flash --}}
+   {{-- ══════════════ Mensaje flash (se oculta solo a los 4 s) ══════════════ --}}
     @if (session('success'))
-        <div class="mb-6 rounded-lg border border-emerald-300 bg-emerald-50 p-4 text-sm text-emerald-800
-                    dark:border-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">
-            {{ session('success') }}
-        </div>
+       <div x-data="{ visible: true }"
+                 x-init="setTimeout(() => visible = false, 4000)"
+                 x-show="visible"
+                 x-transition.opacity.duration.400ms
+                 class="flex items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-800
+                        dark:border-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300">
+                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                </svg>
+                {{ session('success') }}
+            </div>
     @endif
 
     @if (session('error'))
@@ -18,6 +21,28 @@
             {{ session('error') }}
         </div>
     @endif
+
+
+ {{-- ══════════════ Encabezado de la página ══════════════ --}}
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-widest text-amber-600 dark:text-amber-400">
+                   Movimientos
+                </p>
+                <h1 class="mt-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                   Entradas de inventario
+                </h1>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                   Ingresos de trigo a las bodegas
+                </p>
+            </div>
+
+            {{-- Botón dorado: mismo acento que "Nueva Salida", contrasta en tema claro y oscuro --}}
+            {{-- TODO: cambia href="" por la ruta variedades.create cuando la tengas --}}
+
+        </div>
+
+
 
     {{-- Filtros y acciones --}}
 <form method="GET" action="{{ route('entradas.index') }}"
@@ -92,10 +117,12 @@
 
 
     {{-- Tabla --}}
-    <div class="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm
-                dark:border-gray-700 dark:bg-gray-900">
-        <table class="w-full text-sm">
-            <thead>
+    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm
+                    dark:border-gray-700 dark:bg-gray-800">
+
+    <div class="overflow-x-auto">
+        <table class="w-full divide-y divide-gray-200 text-sm dark:divide-gray-700">
+            <thead class="bg-gray-50 dark:bg-gray-900/95">
                 <tr class="border-b border-gray-200 text-left text-xs uppercase tracking-wide
                            text-gray-500 dark:border-gray-700 dark:text-gray-400">
                     <th class="px-4 py-3">Folio</th>
@@ -103,28 +130,37 @@
                     <th class="px-4 py-3">Bodega</th>
                     <th class="px-4 py-3">Origen</th>
                     <th class="px-4 py-3">Variedades</th>
-                    <th class="px-4 py-3 text-right">Kilos</th>
-                    <th class="px-4 py-3 text-right">Bultos</th>
+                    <th class="px-4 py-3 ">Kilos</th>
+                    <th class="px-4 py-3 ">Bultos</th>
                     <th class="px-4 py-3">Capturó</th>
+                    <th class="px-4 py-3">Vista</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody x-ref="tbody" class="divide-y divide-gray-100 dark:divide-gray-700/60">
                 @forelse ($entradas as $entrada)
-                    <tr class="border-b border-gray-100 hover:bg-gray-50
-                               dark:border-gray-800 dark:hover:bg-gray-800/50">
-                        <td class="px-4 py-3 font-mono font-semibold">{{ $entrada->folio }}</td>
+                    <tr class="transition-colors hover:bg-emerald-50/60 dark:hover:bg-emerald-900/10">
+                        <td class="px-4 py-3">
+                                 <span class="font-semibold text-gray-900 dark:text-white">
+                                     {{ $entrada->folio }}
+                                 </span>
+                            </div>
+                        </td>
                         <td class="px-4 py-3">{{ $entrada->fecha->format('d/m/Y') }}</td>
-                        <td class="px-4 py-3">{{ $entrada->ubicacion->nombre }}</td>
+                        <td class="px-4 py-3">
+<span class="font-semibold text-gray-900 dark:text-white">
+                            {{ $entrada->ubicacion->nombre }}
+</span>
+                        </td>
                         <td class="px-4 py-3 text-gray-500 dark:text-gray-400">
                             {{ $entrada->origen ?? '—' }}
                         </td>
                         <td class="px-4 py-3">
                             {{ $entrada->detalles->pluck('variedad.nombre')->join(', ') }}
                         </td>
-                        <td class="px-4 py-3 text-right font-mono">
+                        <td class="px-4 py-3  font-mono">
                             {{ number_format($entrada->detalles->sum('toneladas'), 3) }}
                         </td>
-                        <td class="px-4 py-3 text-right font-mono">
+                        <td class="px-4 py-3  font-mono">
                             {{ number_format($entrada->detalles->sum('bultos')) }}
                         </td>
                         <td class="px-4 py-3 text-gray-500 dark:text-gray-400">
@@ -153,8 +189,10 @@
 </td>
                     </tr>
                 @endforelse
+
             </tbody>
         </table>
+    </div>
     </div>
 
     {{-- Paginación --}}

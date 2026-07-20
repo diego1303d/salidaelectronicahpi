@@ -8,7 +8,7 @@ use App\Http\Controllers\EntradaController;
 use App\Http\Controllers\InventarioController;
    use App\Http\Controllers\SalidaController;
 
-   
+
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
@@ -75,10 +75,13 @@ Route::resource('entradas', EntradaController::class)
 
     //salidas
 
- 
+
 Route::resource('salidas', SalidaController::class)
     ->only(['index', 'create', 'store', 'show']);
 
 });
+
+Route::get('/generar-pdf/{id}/pdf', [SalidaController::class,'generarPDF']);
+
 
 require __DIR__.'/auth.php';

@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum Vriedades: string
+enum Variedades: string
 {
     case CERTIFICADO = '1';
     case REGISTRADO = '2';

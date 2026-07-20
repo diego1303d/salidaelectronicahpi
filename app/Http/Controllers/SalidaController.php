@@ -43,7 +43,7 @@ public function index(Request $request)
     return view('salidas.index', compact('salidas', 'ubicaciones'));
 }
 
- 
+
     public function __construct(private SalidaService $salidaService)
     {
     }
@@ -86,6 +86,7 @@ public function show(Salida $salida)
 {
     $salida->load(['detalles.variedad', 'origen', 'destino', 'usuario', 'historial.usuario']);
 
+
     return view('salidas.show', compact('salida'));
 }
 
@@ -112,4 +113,23 @@ public function show(Salida $salida)
     {
         //
     }
+
+
+    public function generarPDF(Salida $id) {
+$logoPath = public_path('img/logo.png'); // Ruta a tu archivo
+
+    $datos=Salida::find($id);
+    $logoData = base64_encode(file_get_contents($logoPath));
+    $logoBase64 = 'data:image/png;base64,' . $logoData;
+
+   
+    $pdf = app('dompdf.wrapper');
+    $pdf->loadView('salidas.documento',compact('datos','logoBase64')); // Carga la vista que creaste
+    return $pdf->stream('documento.pdf'); // Genera y descarga el PDF
 }
+
+}
+
+
+
+

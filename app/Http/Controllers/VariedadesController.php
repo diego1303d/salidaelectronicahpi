@@ -45,8 +45,8 @@ public function create()
 
 public function store(StoreVariedadRequest $request,VariedadService $variedadService):RedirectResponse
 {
-   
-  
+
+
 $variedadData = $request->validated();
 
 

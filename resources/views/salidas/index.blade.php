@@ -88,7 +88,7 @@
                     @forelse ($salidas as $salida)
                         <tr class="border-b hover:bg-green-900/5">
                             <td class="px-3 py-2 font-mono">
-                                <a href="{{ route('salidas.show', $salida) }}"
+                                <a href="{{ route('reportes.generar', $salida->id) }}"
                                    class="text-green-800 font-bold hover:underline">
                                     {{ $salida->folio }}
                                 </a>

@@ -130,12 +130,15 @@ return [
 
      'providers' => ServiceProvider::defaultProviders()->merge([
 
-     Barryvdh\DomPDF\ServiceProvider::class
+     Barryvdh\DomPDF\ServiceProvider::class,
+     Isahaq\BarcodeQrCode\BarcodeQrCodeServiceProvider::class
     ])->toArray(),
 
 
       'aliases' => Facade::defaultAliases()->merge([
        'PDF' => Barryvdh\DomPDF\Facade::class,
+          'Barcode' => Isahaq\BarcodeQrCode\Facades\Barcode::class,
+    'QRCode' => Isahaq\BarcodeQrCode\Facades\QRCode::class
     ])->toArray(),
 
 

@@ -89,7 +89,7 @@ El corazón del sistema. Aquí se captura el documento y se descuenta el inventa
 
 ## Fase 4 — Impresión del documento con código de barras
 
-* \[ ] Vista PDF del documento (dompdf): encabezado, folio, datos del cliente o bodega destino, partidas, totales, firmas
+* \[x ] Vista PDF del documento (dompdf): encabezado, folio, datos del cliente o bodega destino, partidas, totales, firmas
 * \[ ] Generar el código de barras **Code128 del folio** con picqer y meterlo al PDF:
 
 ```php

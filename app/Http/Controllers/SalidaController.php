@@ -9,6 +9,10 @@ use App\Models\Variedad;
 use App\Services\SalidaService;
 use Illuminate\Http\Request;
 use App\Models\Salida;
+use Picqer\Barcode\BarcodeGeneratorPNG;
+
+
+
 
 use App\Http\Requests\StoreSalidaRequest;
 
@@ -113,22 +117,52 @@ public function show(Salida $salida)
     {
         //
     }
+public function barcode(){
+    return view('salidas.barcode');
+}
 
 
-    public function generarPDF(Salida $id) {
-$logoPath = public_path('img/logo.png'); // Ruta a tu archivo
 
-    $datos=Salida::find($id);
+    public function generar(Salida $salida) {
+
+
+    $logoPath = public_path('img/logo.png'); // Ruta a tu archivo
+
+    $salida->load(['detalles.variedad', 'origen', 'destino', 'usuario', 'historial.usuario']);
     $logoData = base64_encode(file_get_contents($logoPath));
     $logoBase64 = 'data:image/png;base64,' . $logoData;
 
-   
+   // --- Código de barras a partir del folio ---
+    $generator = new BarcodeGeneratorPNG();
+    // getBarcode(valor, tipo, factorAncho, alto, color)
+    $barcodePng    = $generator->getBarcode((string) $salida->folio, $generator::TYPE_CODE_128, 2, 40);
+    $barcodeBase64 = 'data:image/png;base64,' . base64_encode($barcodePng);
+
     $pdf = app('dompdf.wrapper');
-    $pdf->loadView('salidas.documento',compact('datos','logoBase64')); // Carga la vista que creaste
+    $pdf->loadView('salidas.documento', [
+        'salida'        => $salida,
+        'logoBase64'    => (string) $logoBase64,
+        'barcodeBase64' => $barcodeBase64,
+    ]);
+
+
+
     return $pdf->stream('documento.pdf'); // Genera y descarga el PDF
 }
 
+
+
+
+
+
 }
+
+
+
+
+
+
+
 
 
 

@@ -79,9 +79,14 @@ Route::resource('entradas', EntradaController::class)
 Route::resource('salidas', SalidaController::class)
     ->only(['index', 'create', 'store', 'show']);
 
+
+    Route::get('reportes/{salida}/generar', [App\Http\Controllers\SalidaController::class, 'generar'])->name('reportes.generar');
+
+     Route::get('barcode', [App\Http\Controllers\SalidaController::class, 'barcode'])->name('barcode.generar');
+
 });
 
-Route::get('/generar-pdf/{id}/pdf', [SalidaController::class,'generarPDF']);
+
 
 
 require __DIR__.'/auth.php';
